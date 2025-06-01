@@ -2,16 +2,118 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>First Post</title>
+  <title>NextJS Concepts</title>
+  <link rel="icon" href="../assets/blueside_logo.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="max-w-3xl mx-auto px-4 py-8">
-  <a href="../index.html" class="text-blue-600 underline">&larr; Back</a>
-  <h1 class="text-3xl font-bold mt-4">First Post</h1>
-  <p class="text-sm text-gray-500">2025-06-01</p>
-  <p class="text-sm text-gray-500">#tag1 #tag2</p>
+  <a href="../index.html" class="text-blue-600 underline block mb-4">&larr; Back</a>
+  <div class="max-w-4xl mx-auto flex items-center space-x-4">
+    <img src="../assets/blueside_logo.png" alt="Logo" class="w-10 h-10 rounded" />
+    <h1 class="text-3xl font-bold">NextJS Concepts</h1>
+  </div>
+  <div class="max-w-4xl mx-auto mt-1">
+    <p class="text-sm text-gray-500">2025-06-01</p>
+    <p class="text-sm text-gray-500">#server-side #nextjs</p>
+  </div>
   <article class="mt-6 prose">
-    <p>First blog content...</p>
+    <h2 class="text-2xl font-semibold mt-10 mb-4">File Based Routing</h2>
+    <ul class="list-disc list-inside space-y-2">
+      <li>
+        We can create routes using files. The <code class="bg-gray-100 px-1 rounded">pages</code> directory in a Next.js app is special.
+        <ul class="list-disc list-inside ml-6 space-y-1">
+          <li><code>pages/index.js</code> will have the route of <code>/</code></li>
+          <li><code>pages/mypage</code> will have the route of <code>/mypage</code></li>
+          <li>
+            Any pages within a directory will include the directory name in their route.
+            <ul class="list-disc list-inside ml-6">
+              <li>So if <code>mypage</code> was contained in <code>mydir</code> then the route will be <code>/mydir/mypage</code></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        Can use the <code>Link</code> component for client-side routing
+        <ul class="list-disc list-inside ml-6">
+          <li>Behaves like <code>&lt;a&gt;</code> but doesn’t rerender the full page</li>
+          <li>Example: <code class="bg-gray-100 px-1 rounded">&lt;Link href="mydir/myroute"&gt;&lt;/Link&gt;</code></li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">Project Assets (Images and Scripts)</h2>
+    <ul class="list-disc list-inside space-y-2">
+      <li>Static assets can be served from the <code>public</code> directory and referenced like pages.</li>
+      <li>
+        Next.js provides components to handle web-specific optimizations:
+        <ul class="list-disc list-inside ml-6">
+          <li><code>Image</code> from <code>'next/image'</code> handles resizing and optimization.</li>
+          <li><code>Script</code> from <code>'next/script'</code> optimizes third-party script loading with a <code>strategy</code> attribute and <code>onLoad</code> handlers.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">Project Styling</h2>
+    <ul class="list-disc list-inside space-y-2">
+      <li>
+        <strong>Global CSS</strong> (loaded on every page):
+        <ul class="list-disc list-inside ml-6">
+          <li>Create <code>pages/_app.js</code> to import global CSS (no other way works).</li>
+          <li>This file wraps all pages and helps maintain state and apply global styles.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Component-level CSS</strong> with CSS modules:
+        <ul class="list-disc list-inside ml-6">
+          <li>Use <code>.module.css</code> files for component styles.</li>
+          <li>Import with alias: <code>import styles from '../../file.module.css'</code></li>
+          <li>Apply styles via <code>className</code>: <code>&lt;section className={styles.container}&gt;&lt;/section&gt;</code></li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">Next.js Pre-Rendering</h2>
+    <ul class="list-disc list-inside space-y-2">
+      <li>By default, Next.js pre-renders every page (HTML generated in advance).</li>
+      <li>The browser runs the JS and "hydrates" the page when loaded.</li>
+      <li>Two types of pre-rendering:
+        <ul class="list-disc list-inside ml-6">
+          <li><strong>Static Generation</strong>
+            <ul class="list-disc list-inside ml-6">
+              <li>HTML is built at compile time and reused.</li>
+              <li>Ideal for content that doesn’t change per request.</li>
+              <li>Use <code>getStaticProps</code> to fetch required data.</li>
+            </ul>
+          </li>
+          <li><strong>Server-Side Rendering</strong>
+            <ul class="list-disc list-inside ml-6">
+              <li>HTML is generated on each request.</li>
+              <li>Use <code>getServerSideProps</code> for dynamic content.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>You can use both strategies in the same app (hybrid).</li>
+    </ul>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">Statically Generate Dynamic Routes</h2>
+    <ul class="list-disc list-inside space-y-2">
+      <li>Create a dynamic page using square brackets, e.g. <code>[id].js</code></li>
+      <li>Use <code>getStaticPaths</code> to return all possible <code>id</code> values
+        <ul class="list-disc list-inside ml-6">
+          <li>Return an object with a <code>params</code> key, matching the filename param.</li>
+        </ul>
+      </li>
+      <li>Use <code>getStaticProps</code> to fetch data based on the <code>id</code>.</li>
+      <li><code>getStaticPaths</code> supports a <code>fallback</code> option:
+        <ul class="list-disc list-inside ml-6">
+          <li><code>false</code> = 404 if path not returned by <code>getStaticPaths</code>.</li>
+          <li><code>true</code> = Next.js renders fallback while generating the page.</li>
+        </ul>
+      </li>
+      <li>Workflow: use <code>getStaticPaths</code> for ids, and <code>getStaticProps</code> for data per id.</li>
+    </ul>
+  </div>
   </article>
 </body>
 </html>
