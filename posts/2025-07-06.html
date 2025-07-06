@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Mojo Programming Language</title>
+  <link rel="icon" href="../assets/blueside_logo.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="max-w-3xl mx-auto px-4 py-8">
+  <a href="../index.html" class="text-blue-600 underline block mb-4">&larr; Back</a>
+  <div class="max-w-4xl mx-auto flex items-center space-x-4">
+    <img src="../assets/blueside_logo.png" alt="Logo" class="w-10 h-10 rounded" />
+    <h1 class="text-3xl font-bold">Mojo Programming Language</h1>
+  </div>
+  <div class="max-w-4xl mx-auto mt-1">
+    <p class="text-sm text-gray-500">2025-07-06</p>
+    <p class="text-sm text-gray-500">#mojo #python</p>
+    <div class="flex items-center space-x-1 text-sm text-gray-700">
+        <p>View on GitHub:</p>
+        <a href="https://github.com/jdspell/mojo/tree/main/life" class="text-blue-600 hover:underline">life.mojo</a>
+      </div>
+  </div>
+  <article class="mt-6 prose">
+    <details open class="border-b border-gray-300 py-4">
+        <summary class="text-2xl font-semibold cursor-pointer select-none">
+            Initial Reflections on Mojo v25.5.0
+        </summary>
+        <p>
+            A funky assortment of novel technology that feels somewhat familiar!
+            I'm eager to see how the Modular team is able to elevate the Python language and ecosystem.
+            Given the modern MLIR technology stack it will be interesting to see the language morph over time.
+            Mojo appears to give me more power with expressive features like traits and more responsibility with pointers plus an ownership model.
+            Excited to build out some smaller projects and start benchmarking the language against various Python and PyTorch implementations!
+        </p>
+    </details>
+
+    <details class="border-b border-gray-300 py-4">
+        <summary class="text-2xl font-semibold cursor-pointer select-none">
+        Setup (Mojo v25.5.0.dev2025062815)
+        </summary>
+        <ul class="list-disc list-inside space-y-2">
+            <li>
+                Setup was really minimal only a few commands to get started though the docs currently want the nightly build installed and it was not clear why they did not want to install the stable build.
+            </li>
+            <li>
+                Steps:
+                <ol class="list-decimal list-outside ml-6 space-y-4">
+                    <li>
+                        Install package manager (pixi): <code class="bg-gray-100 px-1 rounded">curl -fsSL https://pixi.sh/install.sh | sh</code>
+                    </li>
+                    <li>
+                        Create project called 'life': <br/>
+                        <code class="bg-gray-100 px-1 rounded">
+                            pixi init life \ <br/>
+                            -c https://conda.modular.com/max-nightly/ -c conda-forge && cd life
+                        </code>
+                    </li>
+                    <li>
+                        Add modular (mojo included): <code class="bg-gray-100 px-1 rounded">pixi add modular</code>
+                    </li>
+                    <li>
+                        Verify modular installation: <code class="bg-gray-100 px-1 rounded">pixi run mojo --version</code>
+                    </li>
+                    <li>
+                        Project structure and launching the virtual environment shell:
+                        <ul class="list-disc list-outside ml-6 space-y-2">
+                            <li>
+                                Two files to note would be the toml and lock files that were created.
+                                <ul class="list-disc list-outside ml-6 space-y-2">
+                                    <li>A .toml for managing the projects dependencies.</li>
+                                    <li>A lock for mananging all the transitive dependencies of the project.</li>
+                                </ul>
+                            </li>
+                            <li>Similar to python conda, venv or uv workflows we will create and manage specific projects using virtual environments.</li>
+                            <li>A directory was created '.pixi' which contains a conda virtual env.</li>
+                            <li>                    
+                                We need to launch a shell in this virtual env to run our mojo program.
+                                Launch shell session in virtual env: <code class="bg-gray-100 px-1 rounded">pixi shell</code>
+                            </li>
+                        </ul>                    
+                    </li>
+                    <li>
+                        Create a .mojo file with a main function and you can now run it. In the docs we'll be creating a life.mojo file and recreating Conway's Game of Life.
+                        Run mojo program: <code class="bg-gray-100 px-1 rounded">mojo life.mojo</code>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                I had some issues setting up with pixi specifically due to the fact I'm using windows subsystem for linux. 
+                When runnning the 'pixi shell' command I was seeing errors related to the new shell creation and the fact that my .bashrc file is leveraging 'sudo' commands on startup.
+                Running the command: <code class="bg-gray-100 px-1 rounded">eval "$(pixi shell-hook)"</code> allowed me to temporarily get around this.
+            </li>
+        </ul>
+    </details>
+    
+    <details class="border-b border-gray-300 py-4">
+        <summary class="text-2xl font-semibold cursor-pointer select-none">
+        Basic Syntax Notes
+        </summary>
+        <ul class="list-disc list-inside space-y-2">
+        <li>
+            Can declare variables with and without a keyword. The following are synonymous:
+            <ul class="list-disc list-inside ml-6 space-y-1">
+            <li><code class="bg-gray-100 px-1 rounded">var name: String = input("Who are you? ")</code></li>
+            <li><code class="bg-gray-100 px-1 rounded">name: String = input("Who are you? ")</code></li>
+            </ul>
+        </li>
+        <li>
+            Signed integers are represented with <code class="bg-gray-100 px-1 rounded">Int</code> type. 
+            Representing CPU word size (32 or 64bit).
+            Some functions/methods may return <code class="bg-gray-100 px-1 rounded">Int64</code> types, which are not the same as <code class="bg-gray-100 px-1 rounded">Int</code>. 
+            To handle these cases we can pass in the <code class="bg-gray-100 px-1 rounded">Int64</code> type to the <code class="bg-gray-100 px-1 rounded">Int()</code> constructor to convert.
+        </li>
+        <li>
+            Dynamic sequence/collection is represented with <code class="bg-gray-100 px-1 rounded">List</code> type and values must be the same type for type safety.
+            <ul class="list-disc list-inside ml-6">
+            <li>Integer list -> <code class="bg-gray-100 px-1 rounded">row = List[Int]()</code></li>
+            <li>String list  -> <code class="bg-gray-100 px-1 rounded">row = List[String]()</code></li>
+            <li>
+                List initialization can be done two ways:        
+                <ul class="list-disc list-inside ml-6">
+                    <li>List constructor -> <code class="bg-gray-100 px-1 rounded">row = List(1, 2, 3)</code></li>
+                    <li>List literal     -> <code class="bg-gray-100 px-1 rounded">row = [1, 2, 3]</code></li>
+                </ul>
+            </li>
+            <li>
+                Python List operations that are available: <code class="bg-gray-100 px-1 rounded">row.append(), row.pop(), len(row)</code>
+            </li>
+            </ul>
+        </li>
+        <li>
+            Functions can be defined with <code class="bg-gray-100 px-1 rounded">def</code> and <code class="bg-gray-100 px-1 rounded">fn</code>:
+            <ul class="list-disc list-inside ml-6 space-y-1">
+                <li>
+                    Both definitions require you to declare the type of all parameters and arguments. 
+                    The core difference between the two is due to error handling.
+                    We can operate from the basis that <code class="bg-gray-100 px-1 rounded">fn</code> provides more fine grain control and <code class="bg-gray-100 px-1 rounded">def</code> provides sensible defaults.
+                    Specifically <code class="bg-gray-100 px-1 rounded">fn</code> can only raise an error if the <code class="bg-gray-100 px-1 rounded">raises</code> declaration is used.
+                </li>
+                <li>
+                    Similar to Python arguments can be optional and postional/keyword based. 
+                    Where things feel like they begin to diverge are with Variadic arguments, which can be homogenous and heterogenous.
+                    Homogenous variadic args are similar to python *args (variable positional arguments) and **kwargs (variable keyword arguments).
+                    But Heterogenous variadic arguments allow for these passed in args to be of differing types and require traits which makes the syntax feel very foreign.
+                </li>
+                <li>
+                    Here is an example function that we will be using to print the grid as a string:
+                    <pre class="bg-gray-200 text-sm rounded-md px-4 py-2 font-mono overflow-x-auto inline-block leading-tight">
+                        <code class="language-python">
+    def grid_str(rows: Int, cols: Int, grid: List[List[Int]]) -> String:
+        str = String()
+        for row in range(rows):
+            for col in range(cols):
+                if grid[row][col] == 1:
+                    str += "*"
+                else:
+                    str += " "
+            if row != rows - 1:
+                str += "\n"
+        return str
+                        </code>
+                    </pre>
+                </li>
+                <li>
+                    While we are using range to iterate over the list Mojo has the ability to directly iterate over a collection using for without range plus list indexing. <br/>
+                    <pre class="bg-gray-200 text-sm rounded-md px-4 py-2 font-mono overflow-x-auto inline-block leading-tight">
+                        <code class="language-python">
+    nums = [1, 2, 3]
+    for num in nums:
+        print("Number: ", num)
+                        </code>
+                    </pre>
+                </li>
+            </ul>
+        </li>
+        <li>
+            Structs can be used to create custom types. 
+            These are similar to classes, but do not support inheritance and Mojo current does not support classes for the time being.
+            Mojo structs have the following components:
+            <ul class="list-disc list-inside ml-6 space-y-1">
+                <li>Fields: variables containing the data of the struct, which are accessed using dot notation.</li>
+                <li>
+                    Methods: optional functions that manipulate the data of the struct. 
+                    Read only methods need to be defined with keyword <code class="bg-gray-100 px-1 rounded">self</code> as Mojo passes the instance as the first argument. 
+                    For methods that mutate the original instance we need to use <code class="bg-gray-100 px-1 rounded">mut self</code>.
+                    Mojo also has a <code class="bg-gray-100 px-1 rounded">@staticmethod</code> annotation that allows us to define methods that are not attached to any struct instance.
+                </li>
+            </ul>
+            We must declare Fields (name and type) on structs in the definition and adding fields during runtime is not allowed.
+            Structs can be created through constructors defined with an <code class="bg-gray-100 px-1 rounded">__init__()</code> method or we can use the <code class="bg-gray-100 px-1 rounded">@fieldwise_init</code> decorator to reduce boilerplate.
+        </li>
+        <li>
+            Another Mojo divergence from Python is the introduction of Traits and how we can define these on the struct to control behavior of the struct lifecycle (create, move, copy, destroy). 
+            Traits are effectively a set of methods that must be implemented for a given type. The following struct definition has a copyable and moveable trait. <br/>
+            <pre class="bg-gray-200 text-sm rounded-md px-4 py-2 font-mono overflow-x-auto inline-block leading-tight">
+                <code class="language-python">
+@fieldwise_init
+struct Grid(Copyable, Movable):
+    var rows: Int
+    var cols: Int
+    var data: List[List[Int]]
+                </code>
+            </pre>
+        </li>
+        <li>
+            Just like Python Mojo contains packages and modules, which are just mojo source files.
+            We can import from other modules following the familiar Python syntax: <br/>
+            <code class="bg-gray-100 px-1 rounded">from test_module import example_function</code>.
+        </li>
+        </ul>
+    </details>
+
+    <details class="border-b border-gray-300 py-4">
+        <summary class="text-2xl font-semibold cursor-pointer select-none">
+            Integrating Python Code in a Mojo Project
+        </summary>
+        <ul class="list-disc list-inside space-y-2">
+            <li>
+                An exciting feature of Mojo is the ability to integrate Python code into a Mojo project, which allows us to leverage the vast Python ecosystem.
+                We need to add the Python dependency and associated Python packages we want to interact with to the <code class="bg-gray-100 px-1 rounded">pixi.toml</code> file that tracks the Mojo project dependencies.
+            </li>
+            <li>
+                To do this we simply leverage pixi to update the virtual environment dependencies. </br>
+                <code class="bg-gray-100 px-1 rounded">pixi add "python&gt;=3.11,&lt;3.13" "pygame&gt;=2.6.1,&lt;3"</code> </br>
+                Note Mojo does not package a Python runtime when it builds a Mojo project meaning the environment executing the project code must include a valid Python version and associated dependencies.
+            </li> 
+            <li>
+                We can import a Python module using <code class="bg-gray-100 px-1 rounded">Python.import_module()</code>, which will return a reference type of 'PythonObject' that acts as a wrapper.
+                From this point the python module can be used in the Mojo project.
+            </li>
+        </ul>
+    </details>
+
+    <details class="border-b border-gray-300 py-4">
+        <summary class="text-2xl font-semibold cursor-pointer select-none">
+        Tutorial Code - Conway's Game of Life
+        </summary>
+        <h3 class="text-gray-800 text-sm font-mono px-3 py-1 rounded">
+            gridv1.mojo:
+        </h3>
+        <pre class="bg-gray-200 text-sm rounded-md px-4 py-2 font-mono overflow-x-auto inline-block leading-tight">
+            <code class="language-python">
+import random
+
+@fieldwise_init
+struct Grid(Copyable, Movable, StringableRaising):
+    var rows: Int
+    var cols: Int
+    var data: List[List[Int]]
+    
+    def __str__(self) -> String:
+        str = String()
+        for row in range(self.rows):
+            for col in range(self.cols):
+                if self[row, col] == 1:
+                    str += "*"
+                else:
+                    str += " "
+            if row != self.rows-1:
+                str += "\n"
+        return str
+    
+    def __getitem__(self, row: Int, col: Int) -> Int:
+        return self.data[row][col]
+    
+    def __setitem__(mut self, row: Int, col: Int, value: Int) -> None:
+        self.data[row][col] = value
+    
+    @staticmethod
+    def random(rows: Int, cols: Int) -> Self:
+        random.seed() # seed based on current time -> value is always unique
+        var data: List[List[Int]] = []
+        # _ follows the discard pattern. Otherwise the mojo compiler would throw a warning.
+        for _ in range(rows):
+            var row_data: List[Int] = []
+            for _ in range(cols):
+                row_data.append(Int(random.random_si64(0, 1)))
+            data.append(row_data)
+        return Self(rows, cols, data)
+
+    def evolve(self) -> Self:
+        next_generation = List[List[Int]]()
+
+        for row in range(self.rows):
+            row_data = List[Int]()
+            # calc neighboring row indicies
+            row_above = (row - 1) % self.rows
+            row_below = (row + 1) % self.rows
+
+            for col in range(self.cols):
+                # calc neighboring col indicies
+                col_left = (col - 1) % self.cols
+                col_right = (col + 1) % self.cols
+                # determine the number of populated cells
+                num_neighbors = (
+                    self[row_above, col_left]
+                    + self[row_above, col]
+                    + self[row_above, col_right]
+                    + self[row, col_left]
+                    + self[row, col_right]
+                    + self[row_below, col_left]
+                    + self[row_below, col]
+                    + self[row_below, col_right]
+                )
+
+                # determine the state of current cell for next generation
+                new_state = 0
+                if self[row, col] == 1 and (num_neighbors == 2 or num_neighbors == 3):
+                    new_state = 1
+                elif self[row, col] == 0 and num_neighbors == 3:
+                    new_state = 1
+                row_data.append(new_state)
+            next_generation.append(row_data)
+        return Self(self.rows, self.cols, next_generation)                
+            </code>
+        </pre>
+        <h3 class="text-gray-800 text-sm font-mono px-3 py-1 rounded">
+            life.mojo:
+        </h3>
+        <pre class="bg-gray-200 text-sm rounded-md px-4 py-2 font-mono overflow-x-auto inline-block leading-tight">
+            <code class="language-python">
+from gridv1 import Grid
+from python import Python
+import time
+
+def run_display(
+    owned grid: Grid,
+    window_height: Int = 600,
+    window_width: Int = 600,
+    background_color: String = "black",
+    cell_color: String = "green",
+    pause: Float64 = 0.1,
+) -> None:
+    pygame = Python.import_module("pygame")
+    pygame.init()
+
+    window = pygame.display.set_mode(
+        Python.tuple(window_height, window_width)
+    )
+    pygame.display.set_caption("Conway's Game of Life")
+
+    cell_height = window_height / grid.rows
+    cell_width = window_width / grid.cols
+    border_size = 1
+    cell_fill_color = pygame.Color(cell_color)
+    background_fill_color = pygame.Color(background_color)
+
+    running = True
+    while running:
+        event = pygame.event.poll()
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
+                running = False
+        
+        window.fill(background_fill_color)
+        for row in range(grid.rows):
+            for col in range(grid.cols):
+                if grid[row, col]:
+                    x = col * cell_width + border_size
+                    y = row * cell_height + border_size
+                    width = cell_width - border_size
+                    height = cell_height - border_size
+                    pygame.draw.rect(
+                        window,
+                        cell_fill_color,
+                        Python.tuple(x, y, width, height),
+                    )
+        pygame.display.flip()
+        time.sleep(pause)
+        grid = grid.evolve()
+    pygame.quit()
+
+def main():
+    start = Grid.random(16,16)
+    run_display(start)              
+            </code>
+        </pre>
+    </details>
+    
+  </article>
+</body>
+</html>
