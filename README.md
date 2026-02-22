@@ -24,15 +24,18 @@ published: true
 3. Write content in Markdown below the front matter.
 4. Optionally add a `code/` subfolder for any code files associated with the post.
 
-## Drafts and Coming Soon
+## Upcoming / Drafts
 
-Set `published: false` in front matter. The post lives in the repo but will not appear on the live site.
+Work-in-progress posts live in `_upcoming/topic-name/` with no date in the folder name.
+Jekyll ignores this folder entirely, so nothing there affects the live site.
 
-To preview unpublished posts locally:
+The `index.md` inside is plain Markdown — no front matter required, just write freely.
 
-```bash
-bundle exec jekyll serve --unpublished
-```
+When a post is ready to publish:
+
+1. Move the folder to `_articles/YYYY-MM-DD_topic-name/`
+2. Add the full front matter (see template above)
+3. Push — it will appear on the site automatically
 
 ## Code Files
 

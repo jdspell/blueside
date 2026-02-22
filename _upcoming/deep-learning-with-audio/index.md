@@ -1,14 +1,9 @@
----
-layout: post
-title: "Deep Learning with Audio"
-date: 2025-07-03
-permalink: /posts/2025-07-03-deep-learning-with-audio/
-tags: [pytorch, audio]
-description: "Working with audio data in PyTorch using torchaudio."
-published: false
----
+# Deep Learning with Audio
 
-_Draft in progress._
+tags: pytorch, audio
+description: Working with audio data in PyTorch using torchaudio.
+
+---
 
 ## Topics to Cover
 
