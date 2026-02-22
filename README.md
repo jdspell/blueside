@@ -5,7 +5,7 @@ Learning journal at [blueside.ai](https://blueside.ai). Built with Jekyll, hoste
 ## Creating a Post
 
 1. Create a folder under `_articles/` named `YYYY-MM-DD_topic-name/`
-2. Add `index.md` with the following front matter:
+2. Add `article.md` with the following front matter:
 
 ```yaml
 ---
@@ -44,7 +44,7 @@ Add a `code/` directory inside the post folder:
 ```
 _articles/
   2025-08-02_transformer-attention/
-    index.md
+    article.md
     code/
       attention.py
       notebook.ipynb

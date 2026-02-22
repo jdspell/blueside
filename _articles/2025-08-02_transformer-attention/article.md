@@ -5,7 +5,7 @@ date: 2025-08-02
 permalink: /posts/2025-08-02-transformer-attention/
 tags: [self-attention, multi-head-attention]
 description: "My notes after reading on the attention mechanism behind the transformer introduced in 'Attention is All You Need'."
-github: "https://github.com/jdspell/blueside-code/tree/main/2025-08-02_attention"
+github: "https://github.com/jdspell/blueside/tree/main/_articles/2025-08-02_transformer-attention/code"
 github_label: "attention code"
 published: true
 ---
