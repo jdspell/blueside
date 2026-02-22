@@ -6,5 +6,9 @@ _site/
 .jekyll-metadata
 Gemfile.lock
 
+# python
+.venv/
+__pycache__/
+
 # misc
 .DS_Store

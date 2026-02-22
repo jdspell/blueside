@@ -4,8 +4,8 @@ Learning journal at [blueside.ai](https://blueside.ai). Built with Jekyll, hoste
 
 ## Creating a Post
 
-1. Create a folder under `_articles/` named `YYYY-MM-DD_topic-name/`
-2. Add `article.md` with the following front matter:
+1. Create a folder under `_articles/` named `YYYY-MM-DD/`
+2. Add a file named after the topic (e.g. `attention.md`) with the following front matter:
 
 ```yaml
 ---
@@ -29,11 +29,11 @@ published: true
 Work-in-progress posts live in `_upcoming/topic-name/` with no date in the folder name.
 Jekyll ignores this folder entirely, so nothing there affects the live site.
 
-The `index.md` inside is plain Markdown — no front matter required, just write freely.
+The file inside is plain Markdown — no front matter required, just write freely.
 
 When a post is ready to publish:
 
-1. Move the folder to `_articles/YYYY-MM-DD_topic-name/`
+1. Move the folder to `_articles/YYYY-MM-DD/` and rename the file to `topic-name.md`
 2. Add the full front matter (see template above)
 3. Push — it will appear on the site automatically
 
@@ -43,8 +43,8 @@ Add a `code/` directory inside the post folder:
 
 ```
 _articles/
-  2025-08-02_transformer-attention/
-    article.md
+  2025-08-02/
+    attention.md
     code/
       attention.py
       notebook.ipynb
