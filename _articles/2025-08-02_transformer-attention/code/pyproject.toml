@@ -1,0 +1,10 @@
+[project]
+name = "attention"
+version = "0.1.0"
+description = "Attention mechanism implementations accompanying the Transformer Attention Mechanism post."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.3.2",
+    "torch>=2.7.1",
+]
