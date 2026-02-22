@@ -1,65 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blueside</title>
-  <link rel="icon" href="assets/blueside_logo.png" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-white text-gray-800 font-sans">
+---
+layout: default
+title: Blueside
+---
 
-  <header class="bg-gray-100 shadow p-4">
-    <div class="max-w-4xl mx-auto flex items-center space-x-4">
-      <img src="assets/blueside_logo.png" alt="Logo" class="w-10 h-10 rounded" />
-      <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold">Blueside</h1>
-        <p class="text-sm text-gray-600">Learning Journal</p>
-      </div>
-    </div>
-  </header>
+<input
+  type="text"
+  id="search"
+  placeholder="Search by keyword or tag"
+  class="w-full p-2 mb-6 border border-gray-300 rounded"
+/>
 
-  <main class="max-w-4xl mx-auto p-4">
-    <input
-      type="text"
-      id="search"
-      placeholder="Search by keyword or tag"
-      class="w-full p-2 mb-6 border border-gray-300 rounded"
-    />
-
-      <!-- <a href="posts/2025-07-01.html" class="block p-4 border rounded hover:bg-gray-50">
-        <h1 class="text-3xl font-bold mt-4">Paper: Reinforcement Pre-Training (RPT)</h1>
-        <p class="text-sm text-gray-500">2025-07-01</p>
-        <p class="text-sm text-gray-500">#paper #reinforcement-learning</p>
-        <p class="mt-2 text-gray-700">Updating scaling paradigms by reframing next token prediction as a reasoning task using RL.</p>
-      </a> -->
-
-
-    <div id="post-list" class="space-y-4">
-      <a href="posts/2025-08-02.html" class="block p-4 border rounded hover:bg-gray-50">
-        <h1 class="text-3xl font-bold mt-4">Transformer Attention Mechanism</h1>
-        <p class="text-sm text-gray-500">2025-08-02</p>
-        <p class="text-sm text-gray-500">#self-attention #multi-head-attention</p>
-        <p class="mt-2 text-gray-700">My notes after reading on the attention mechanism behind the transform introduced in 'Attention is All You Need'.</p>
-      </a>
-
-      <a href="posts/2025-07-06.html" class="block p-4 border rounded hover:bg-gray-50">
-        <h1 class="text-3xl font-bold mt-4">Mojo Programming Language</h1>
-        <p class="text-sm text-gray-500">2025-07-06</p>
-        <p class="text-sm text-gray-500">#mojo #python</p>
-        <p class="mt-2 text-gray-700">Initial Mojo exposure and completion of the Mojo v25.5 tutorial that builds Conway's Game of Life.</p>
-      </a>
-
-      <a href="posts/2025-06-01.html" class="block p-4 border rounded hover:bg-gray-50">
-        <h1 class="text-3xl font-bold mt-4">NextJS Concepts</h1>
-        <p class="text-sm text-gray-500">2025-06-01</p>
-        <p class="text-sm text-gray-500">#server-side #nextjs</p>
-        <p class="mt-2 text-gray-700">High level NextJS concepts from docs covering basic routing and site generation.</p>
-      </a>
-    </div>
-  </main>
-
-
-<script src="js/search.js"></script>
-</body>
-</html>
+<div id="post-list" class="space-y-4">
+  {% assign articles = site.articles | sort: 'date' | reverse %}
+  {% for article in articles %}
+  <a href="{{ article.url | relative_url }}" class="block p-4 border rounded hover:bg-gray-50">
+    <h2 class="text-xl font-bold">{{ article.title }}</h2>
+    <p class="text-sm text-gray-500">{{ article.date | date: "%Y-%m-%d" }}</p>
+    <p class="text-sm text-gray-500">{% for tag in article.tags %}#{{ tag }} {% endfor %}</p>
+    {% if article.description %}
+    <p class="mt-2 text-gray-700">{{ article.description }}</p>
+    {% endif %}
+  </a>
+  {% endfor %}
+</div>

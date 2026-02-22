@@ -1,0 +1,23 @@
+title: Blueside
+description: A learning journal.
+url: "https://blueside.ai"
+baseurl: ""
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+collections:
+  articles:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: articles
+    values:
+      layout: post
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
